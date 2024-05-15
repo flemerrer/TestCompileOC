@@ -7,7 +7,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CalculatorTest {
@@ -75,7 +79,8 @@ public class CalculatorTest {
     public void add_MultipleNumbers_ShouldReturnTheirSum(int arg1, int arg2, int expectedResult){
 
         int actualResult = calculator.add(arg1, arg2);
-        assertEquals(expectedResult, actualResult);
+//        assertEquals(expectedResult, actualResult);
+        assertThat(expectedResult).isEqualTo(actualResult);
     }
 
     @Timeout(1)
@@ -83,6 +88,23 @@ public class CalculatorTest {
     public void longCalcul_ShouldCompleteUnderOneSecond(){
 
         calculator.longCalculation();
+    }
+
+    @Test
+    public void digitsSet_shouldReturnTheSetOfDigits_ofPositiveInteger() {
+        // GIVEN
+        int number = 95897;
+
+        // WHEN
+        Set<Integer> actualDigits = calculator.digitsSet(number);
+
+        // THEN
+        assertThat(actualDigits).containsExactlyInAnyOrder(5, 7, 8, 9);
+
+        // en JUnit pur :
+        Set<Integer> expectedDigits = Stream.of(5, 7, 8, 9).collect(Collectors.toSet());
+        assertEquals(expectedDigits, actualDigits);
+
     }
 
 }
